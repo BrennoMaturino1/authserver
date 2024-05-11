@@ -2,7 +2,7 @@ const express = require("express");
 require("dotenv").config();
 
 const app = express();
-const port = process.env.PORT || 1024;
+const port = process.env.PORT || 80;
 
 app.use(express.json());
 
@@ -27,12 +27,21 @@ function processReq(req, res, isGet) {
         return;
     }
     
-    console.log("?key=" + req.query.key);
+    console.log(req.ip + " sent a request: ?key=" + req.query.key);
+
+    if (req.query.key === "OwO")
+    {
+        res.status(200).json({
+            status: "InvalidAccount",
+            message: "I §4love§r furry §dgirls§r §4<3§r"
+        })
+    }
+    
     if (req.query.key in process.env) {
         console.log("1");
         const [username, accessCode] = process.env[req.query.key].split(",")
         console.log(username + " //// " + accessCode);
-        if (accessCode == "OK") {
+        if (accessCode === "OK") {
             console.log(username + " (or someone with their acess key [" + req.ip + "]) logged in sucessfully UwU :3")
             res.status(200).json({
                 status: "OK",
@@ -40,7 +49,7 @@ function processReq(req, res, isGet) {
                 message: "Welcome, §p" + username + "§r, your account has been verified §asucessfully§r"
             })
             return;
-        } else if (accessCode == "SUSP") {
+        } else if (accessCode === "SUSP") {
             console.log(username + " (or someone with their acess key [" + req.ip + "]) tried to log in but their account is suspended xD")
             res.status(200).json({
                 status: "AccountSuspended",
