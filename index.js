@@ -42,7 +42,7 @@ function processReq(req, res, isGet) {
         res.status(401).json({ message: "§4Invalid§r access key" })
     }
     console.error("i dunno what happened OwO")
-    res.status(400).json({ message: "§4Bad request, unknown error§r"});
+    res.status(500).json({ message: "§4Bad request, unknown error§r"});
 }
 
 // Start the server
