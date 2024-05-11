@@ -14,8 +14,7 @@ app.get("/", (req, res) => {
 
 // POST endpoint
 app.post("/", (req, res) => {
-    const { key } = req.query;
-    const [usernameKey, codeKey] = process.env.USERNAME_CODE.split(", ");
+    const [usernameKey, codeKey] = process.env.[req.query].split(", ");
 
     if (process.env[usernameKey] && process.env[codeKey]) {
         const username = process.env[usernameKey];
