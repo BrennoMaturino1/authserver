@@ -25,10 +25,11 @@ function processReq(req, res, isGet) {
         res.status(400).json("§4Bad request, key is invalid§r");
         console.error("a client sent a bad request OwO")
     }
-
+    console.log("0");
     if (req.query.key in process.env) {
-        const [username, accessCode] = process.env[req.query.key].split(", ")
-
+        console.log("1");
+        const [username, accessCode] = process.env[req.query.key].split(",")
+        console.log(username + " //// " + accessCode);
         if (accessCode == "OK") {
             console.log(username + " (or someone with their acess key) logged in sucessfully UwU :3")
             res.status(200).json({ userName: username, message: "Welcome, §p" + username + "§r, your account has been verified §asucessfully§r" })
