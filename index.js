@@ -22,21 +22,13 @@ function processReq(req, res, isGet) {
     }
 
     if (!req.query.key) {
-        res.status(400).json({status: "ClientError", message: "§4Bad request, key is invalid§r"});
+        res.status(400).json({ status: "ClientError", message: "§4Bad request, key is invalid§r" });
         console.error("a client sent a bad request OwO [" + req.ip + "]")
         return;
     }
-    
+
     console.log(req.ip + " sent a request: ?key=" + req.query.key);
 
-    if (req.query.key === "OwO")
-    {
-        res.status(200).json({
-            status: "InvalidAccount",
-            message: "I §4love§r furry §dgirls§r §4<3§r"
-        })
-    }
-    
     if (req.query.key in process.env) {
         console.log("1");
         const [username, accessCode] = process.env[req.query.key].split(",")
@@ -49,15 +41,15 @@ function processReq(req, res, isGet) {
                 message: "Welcome, §p" + username + "§r, your account has been verified §asucessfully§r"
             })
             return;
-        } else if (accessCode === "SUSP") {
+        } else if (accessCode === "Suspended") {
             console.log(username + " (or someone with their acess key [" + req.ip + "]) tried to log in but their account is suspended xD")
             res.status(200).json({
-                status: "AccountSuspended",
-                userName: username,
-                message: "Welcome, §p" + username + "§r, your account has been §4suspended§r and you cannot use this application"
+                status: "EasterEgg",
+                userName: req.query.key,
+                message: username
             })
             return;
-        }
+        } else if (accessCode === "EasterEgg")
     } else {
         console.log("Someone tried to log in with an invalid key [" + req.ip + "]")
         res.status(200).json({
@@ -67,7 +59,7 @@ function processReq(req, res, isGet) {
         return;
     }
     console.error("i dunno what happened OwO [" + req.ip + "]")
-    res.status(500).json({status: "ServerError", message: "§4Bad request, unknown error§r"});
+    res.status(500).json({ status: "ServerError", message: "§4Bad request, unknown error§r" });
     return;
 }
 
