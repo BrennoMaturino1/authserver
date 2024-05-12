@@ -44,12 +44,21 @@ function processReq(req, res, isGet) {
         } else if (accessCode === "Suspended") {
             console.log(username + " (or someone with their acess key [" + req.ip + "]) tried to log in but their account is suspended xD")
             res.status(200).json({
+                status: "Suspended",
+                userName: username,
+                message: "Welcome, §p" + username + "§r, your account has been §4suspended§r and you cannot use this application"
+            })
+            return;
+        } else if (accessCode === "EasterEgg") {
+            console.log("Easter egg with code \"" + req.query.key + "\" was triggered")
+            res.status(200).json({
                 status: "EasterEgg",
                 userName: req.query.key,
                 message: username
             })
             return;
-        } else if (accessCode === "EasterEgg")
+        }
+
     } else {
         console.log("Someone tried to log in with an invalid key [" + req.ip + "]")
         res.status(200).json({
