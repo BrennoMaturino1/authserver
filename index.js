@@ -21,7 +21,7 @@ function processReq(req, res, isGet) {
         console.warn("A request was made with isGet set to true, you should be aware that get requests are for quickly testing the API in the search bar and shouldn't be used for production")
     }
 
-    console.print(req.headers);
+    console.log(req.headers);
     
     if (!req.query.key) {
         res.status(400).json({ status: "ClientError", message: "§4Bad request, key is invalid§r" });
@@ -32,7 +32,6 @@ function processReq(req, res, isGet) {
     console.log(req.ip + " sent a request: ?key=" + req.query.key);
 
     if (req.query.key in process.env) {
-        console.log("1");
         const [username, accessCode] = process.env[req.query.key].split(",")
         console.log(username + " //// " + accessCode);
         if (accessCode === "OK") {
