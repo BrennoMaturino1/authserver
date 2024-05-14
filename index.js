@@ -21,6 +21,8 @@ function processReq(req, res, isGet) {
         console.warn("A request was made with isGet set to true, you should be aware that get requests are for quickly testing the API in the search bar and shouldn't be used for production")
     }
 
+    console.print(req.headers);
+    
     if (!req.query.key) {
         res.status(400).json({ status: "ClientError", message: "§4Bad request, key is invalid§r" });
         console.error("a client sent a bad request OwO [" + req.ip + "]")
