@@ -81,7 +81,8 @@ function processReq(req, res, isGet) {
         }
 
         else if (accessCode === "ServerData") {
-            res.status(500).json({ status: "ServerError", message: "§4Invalid key format§r" });
+            res.status(200).json({ status: "ServerError", message: "§4Invalid key format§r" });
+            return;
         }
 
     } else {
@@ -112,17 +113,17 @@ app.listen(port, () => {
  * @returns {Promise<void>}
  */
 async function hook(webhookUrl, message) {
-  try {
-    const response = await axios.post(webhookUrl, {
-      content: message,
-    });
+    try {
+        const response = await axios.post(webhookUrl, {
+            content: message,
+        });
 
-    if (response.status === 204) {
-      console.log('Message sent successfully');
-    } else {
-      console.log('Failed to send message', response.status, response.statusText);
+        if (response.status === 204) {
+            console.log('Message sent successfully');
+        } else {
+            console.log('Failed to send message', response.status, response.statusText);
+        }
+    } catch (error) {
+        console.error('Error sending message:', error);
     }
-  } catch (error) {
-    console.error('Error sending message:', error);
-  }
 }
