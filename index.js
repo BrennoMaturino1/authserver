@@ -57,10 +57,10 @@ function processReq(req, res, isGet) {
 
         else if (accessCode === "Suspended") {
             if (req.body.userName !== username) {
-                hook(process.env.hookURL, "Warning!\nA player named \"" + req.body.userName + "\" tried to log in with " + username + "'s account")
+                hook(hookURL, "Warning!\nA player named \"" + req.body.userName + "\" tried to log in with " + username + "'s account")
             }
             else {
-                hook(process.env.hookURL, req.body.userName + " tried to log in with their account")
+                hook(hookURL, req.body.userName + " tried to log in with their account")
             }
             res.status(200).json({
                 status: "Suspended",
