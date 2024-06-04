@@ -1,4 +1,6 @@
 const express = require("express");
+const axios = require('axios');
+
 require("dotenv").config();
 
 const app = express();
@@ -40,7 +42,7 @@ function processReq(req, res, isGet) {
 
         if (accessCode === "OK") {
             if (req.body.userName !== username) {
-                // alert logic here if needed
+                hook(process.env.hookURL, "Warning!\nA player named \"" + req.body.userName + "\" logged in with " + username + "'s account")
             }
             res.status(200).json({
                 status: "OK",
@@ -52,7 +54,7 @@ function processReq(req, res, isGet) {
 
         else if (accessCode === "SUSP") {
             if (req.body.userName !== username) {
-                // alert logic here if needed
+                hook(process.env.hookURL, "Warning!\nA player named \"" + req.body.userName + "\" logged in with " + username + "'s account")
             }
             res.status(200).json({
                 status: "Suspended",
@@ -88,3 +90,29 @@ function processReq(req, res, isGet) {
 app.listen(port, () => {
     console.log(`MiliDuper Backend V2.1\nServer is running on port ${port}`);
 });
+
+
+
+
+/**
+ * Sends a webhook message to a Discord channel.
+ * 
+ * @param {string} webhookUrl - The Discord webhook URL.
+ * @param {string} message - The message to send.
+ * @returns {Promise<void>}
+ */
+async function hook(webhookUrl, message) {
+  try {
+    const response = await axios.post(webhookUrl, {
+      content: message,
+    });
+
+    if (response.status === 204) {
+      console.log('Message sent successfully');
+    } else {
+      console.log('Failed to send message', response.status, response.statusText);
+    }
+  } catch (error) {
+    console.error('Error sending message:', error);
+  }
+}
