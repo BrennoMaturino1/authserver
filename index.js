@@ -8,7 +8,8 @@ app.use(express.json());
 
 // POST endpoint
 app.post("/", (req, res) => {
-    processReq(req, res, false)
+    //processReq(req, res, false)
+    res.status(400).json({ status: "ClientError", message: "Bad Request, GET Requests are not allowed"});
 });
 
 app.get("/", (req, res) => {
@@ -18,7 +19,7 @@ app.get("/", (req, res) => {
 function processReq(req, res, isGet) {
 
     if (isGet) {
-        console.warn("A request was made with isGet set to true, you should be aware that get requests are for quickly testing the API in the search bar and shouldn't be used for production")
+        console.warn("A GET request was made!!!!")
     }
 
     console.log(req.headers);
@@ -75,5 +76,5 @@ function processReq(req, res, isGet) {
 
 // Start the server
 app.listen(port, () => {
-    console.log(`Server is running on port ${port}`);
+    console.log(`Miliduper Backend V1\nServer is running on port ${port}`);
 });
