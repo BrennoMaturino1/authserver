@@ -8,12 +8,12 @@ app.use(express.json());
 
 // POST endpoint
 app.post("/", (req, res) => {
-    //processReq(req, res, false)
-    res.status(400).json({ status: "ClientError", message: "Bad Request, GET Requests are not allowed"});
+    processReq(req, res, false)
 });
 
 app.get("/", (req, res) => {
     processReq(req, res, true)
+    //res.status(400).json({ status: "ClientError", message: "Bad Request, GET Requests are not allowed" });
 });
 
 function processReq(req, res, isGet) {
@@ -23,7 +23,7 @@ function processReq(req, res, isGet) {
     }
 
     console.log(req.headers);
-    
+
     if (!req.query.key) {
         res.status(400).json({ status: "ClientError", message: "§4Bad request, key is invalid§r" });
         console.error("a client sent a bad request OwO [" + req.ip + "]")
@@ -32,26 +32,35 @@ function processReq(req, res, isGet) {
 
     console.log(req.ip + " sent a request: ?key=" + req.query.key);
 
-    if (req.query.key in process.env) {
-        const [username, accessCode] = process.env[req.query.key].split(",")
+    if (req.body.key in process.env) {
+        const [username, accessCode] = process.env[req.body.key].split(",")
         console.log(username + " //// " + accessCode);
+
         if (accessCode === "OK") {
-            console.log(username + " (or someone with their acess key [" + req.ip + "]) logged in sucessfully UwU :3")
+            if (req.body.userName != username) {
+                // alert!!!
+            }
             res.status(200).json({
                 status: "OK",
                 userName: username,
                 message: "Welcome, §p" + username + "§r, your account has been verified §asucessfully§r"
             })
             return;
-        } else if (accessCode === "Suspended") {
-            console.log(username + " (or someone with their acess key [" + req.ip + "]) tried to log in but their account is suspended xD")
+        }
+
+        else if (accessCode === "Suspended") {
+            if (req.body.userName != username) {
+                // alert!!!
+            }
             res.status(200).json({
                 status: "Suspended",
                 userName: username,
                 message: "Welcome, §p" + username + "§r, your account has been §4suspended§r and you cannot use this application"
             })
             return;
-        } else if (accessCode === "EasterEgg") {
+        }
+
+        else if (accessCode === "EasterEgg") {
             console.log("Easter egg with code \"" + req.query.key + "\" was triggered")
             res.status(200).json({
                 status: "EasterEgg",
