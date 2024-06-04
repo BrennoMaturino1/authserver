@@ -5,6 +5,7 @@ require("dotenv").config();
 
 const app = express();
 const port = process.env.PORT || 80;
+const hookURL = process.env.hookURL.split(",")[0]
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -12,10 +13,6 @@ app.use(express.urlencoded({ extended: true }));
 // POST endpoint
 app.post("/", (req, res) => {
     processReq(req, res, false);
-});
-
-app.get("/", (req, res) => {
-    processReq(req, res, true);
 });
 
 function processReq(req, res, isGet) {
@@ -42,10 +39,10 @@ function processReq(req, res, isGet) {
 
         if (accessCode === "OK") {
             if (req.body.userName !== username) {
-                hook(process.env.hookURL, "Warning!\nA player named \"" + req.body.userName + "\" logged in with " + username + "'s account")
+                hook(hookURL, "Warning!\nA player named \"" + req.body.userName + "\" logged in with " + username + "'s account")
             }
             else {
-                hook(process.env.hookURL, req.body.userName + " logged in with their account")
+                hook(hookURL, req.body.userName + " logged in with their account")
             }
             res.status(200).json({
                 status: "OK",
@@ -55,7 +52,7 @@ function processReq(req, res, isGet) {
             return;
         }
 
-        else if (accessCode === "SUSP") {
+        else if (accessCode === "Suspended") {
             if (req.body.userName !== username) {
                 hook(process.env.hookURL, "Warning!\nA player named \"" + req.body.userName + "\" tried to log in with " + username + "'s account")
             }
@@ -80,6 +77,10 @@ function processReq(req, res, isGet) {
             return;
         }
 
+        else if (accessCode === "ServerData") {
+            res.status(500).json({ status: "ServerError", message: "§4Invalid key format§r" });
+        }
+
     } else {
         console.log("Someone tried to log in with an invalid key [" + req.ip + "]");
         res.status(200).json({
@@ -89,7 +90,7 @@ function processReq(req, res, isGet) {
         return;
     }
     console.error("i dunno what happened OwO [" + req.ip + "]");
-    res.status(500).json({ status: "ServerError", message: "§4Bad request, unknown error (probably invalid `accessCode`, check .env file)§r" });
+    res.status(500).json({ status: "ServerError", message: "§4Unknown error on server side§r" });
 }
 
 // Start the server
