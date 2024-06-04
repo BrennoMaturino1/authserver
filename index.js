@@ -50,7 +50,7 @@ function processReq(req, res, isGet) {
             return;
         }
 
-        else if (accessCode === "Suspended") {
+        else if (accessCode === "SUSP") {
             if (req.body.userName !== username) {
                 // alert logic here if needed
             }
@@ -81,7 +81,7 @@ function processReq(req, res, isGet) {
         return;
     }
     console.error("i dunno what happened OwO [" + req.ip + "]");
-    res.status(500).json({ status: "ServerError", message: "§4Bad request, unknown error§r" });
+    res.status(500).json({ status: "ServerError", message: "§4Bad request, unknown error (probably invalid `accessCode`, check .env file)§r" });
 }
 
 // Start the server
