@@ -81,7 +81,7 @@ function processReq(req, res, isGet) {
         }
 
         else if (accessCode === "ServerData") {
-            res.status(200).json({ status: "ServerError", message: "§4Invalid key format§r" });
+            res.status(200).json({ status: "InvalidAccount", message: "§4Invalid key format§r" });
             return;
         }
 
