@@ -24,7 +24,7 @@ function processReq(req, res, isGet) {
 
     console.log(req.headers);
 
-    if (!req.query.key) {
+    if (!req.body.key) {
         res.status(400).json({ status: "ClientError", message: "§4Bad request, key is invalid§r" });
         console.error("a client sent a bad request OwO [" + req.ip + "]")
         return;
