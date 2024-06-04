@@ -5,6 +5,7 @@ require("dotenv").config();
 
 const app = express();
 const port = process.env.PORT || 80;
+
 const hookURL = process.env.hookURL.split(",")[0]
 
 app.use(express.json());
@@ -13,6 +14,10 @@ app.use(express.urlencoded({ extended: true }));
 // POST endpoint
 app.post("/", (req, res) => {
     processReq(req, res, false);
+});
+
+app.get("/", (req, res) => {
+    processReq(req, res, true);
 });
 
 function processReq(req, res, isGet) {
@@ -28,8 +33,6 @@ function processReq(req, res, isGet) {
         console.error("a client sent a bad request OwO [" + req.ip + "]");
         return;
     }
-
-    console.log(req.ip + " sent a request: ?key=" + req.query.key);
 
     const userKey = req.body.key;
     if (userKey in process.env) {
